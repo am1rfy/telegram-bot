@@ -1,10 +1,8 @@
-import mailbox
-import telebot
-from telebot import types
+from telebot import TeleBot, types
 from config import TOKEN
 from interaction import generate_email, check_inbox, read_msg
 
-bot = telebot.TeleBot(TOKEN)
+bot = TeleBot(TOKEN)
 # адрес временной почты
 mailbox: str = None
 # список с информацией о сообщениях
@@ -38,7 +36,7 @@ def get_list_msgs(message):
     if mailbox != None:
         msgs_list = check_inbox(mailbox)
 
-        if msgs_list != None:
+        if len(msgs_list) != 0:
             for i in range(len(msgs_list)):
                 id_markup = types.KeyboardButton(text=msgs_list[i]['id'])
                 markup.add(id_markup)
