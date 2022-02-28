@@ -9,8 +9,6 @@ mailbox: str = None
 # список с информацией о сообщениях
 msgs_list: list = None
 
-# TODO: ДОБАВИТЬ ОТДЕЛЬНЫЙ КЛАСС С ШАБЛОНАМИ КЛАВИАТУР
-
 
 def create_markup(*args):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -73,7 +71,7 @@ def get_list_msgs(message):
                 msg = bot.send_message(message.from_user.id, text=f'{msg_format}\Enter the message id to read it',
                                        reply_markup=markup)
 
-                bot.register_next_step_handler(msg, get_msg_content)
+            bot.register_next_step_handler(msg, get_msg_content)
         else:
             bot.send_message(message.from_user.id, 'Mailbox is empty')
 

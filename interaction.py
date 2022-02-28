@@ -3,8 +3,6 @@ from re import sub
 from requests import get
 import json
 
-# TODO: ДОБАВИТЬ ОБРАБОТКУ ИСКЛЮЧЕНИЙ
-
 
 def generate_email(url=URL) -> str:
     res = get(url, params=generate_params)
