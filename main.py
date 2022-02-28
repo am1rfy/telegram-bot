@@ -9,6 +9,8 @@ mailbox: str = None
 # список с информацией о сообщениях
 msgs_list: list = None
 
+# TODO: ДОБАВИТЬ ОТДЕЛЬНЫЙ КЛАСС С ШАБЛОНАМИ КЛАВИАТУР
+
 
 def create_markup(*args):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -34,7 +36,14 @@ def waiting(message):
 def get_mailbox(message):
     global mailbox
     mailbox = generate_email()
-    bot.send_message(message.from_user.id, f'Your temporary mail: {mailbox}')
+
+    if mailbox == 'Failed to receive mail. Responce error':
+        msg = mailbox
+        mailbox = None
+    else:
+        msg = f'Your temporary mail: {mailbox}'
+
+    bot.send_message(message.from_user.id, text=msg)
 
 
 @ bot.message_handler(commands=['get_messages_list'])
@@ -46,6 +55,10 @@ def get_list_msgs(message):
 
     if mailbox != None:
         msgs_list = check_inbox(mailbox)
+
+        if isinstance(msgs_list, str):
+            bot.send_message(message.from_user.id, text=msgs_list)
+            return
 
         if len(msgs_list) != 0:
             for i in range(len(msgs_list)):
@@ -63,6 +76,7 @@ def get_list_msgs(message):
                 bot.register_next_step_handler(msg, get_msg_content)
         else:
             bot.send_message(message.from_user.id, 'Mailbox is empty')
+
     else:
         bot.send_message(message.from_user.id,
                          'First you need to get the mail by command /new_mail')
@@ -74,7 +88,7 @@ def get_msg_content(message):
     global msgs_list
 
     if mailbox != None:
-        if len(msgs_list) != 0:
+        if get_list_msgs != None:
             content = read_msg(mailbox, message.text)
             res = f'{content}'
             step = waiting
