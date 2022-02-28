@@ -1,5 +1,5 @@
 from telebot import TeleBot, types
-from config import TOKEN
+from settings import TOKEN
 from interaction import generate_email, check_inbox, read_msg
 
 # cам бот
